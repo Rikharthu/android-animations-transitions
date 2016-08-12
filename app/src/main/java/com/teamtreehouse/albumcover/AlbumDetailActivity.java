@@ -1,5 +1,9 @@
 package com.teamtreehouse.albumcover;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
@@ -8,6 +12,9 @@ import android.os.Bundle;
 import android.support.v7.graphics.Palette;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
@@ -34,10 +41,54 @@ public class AlbumDetailActivity extends Activity {
         populate();
     }
 
+    /**
+     * Button will start as a tiny point and then scale to it's appropriate size
+     */
     private void animate() {
+
+        /* Play Button */
+        // Approach 1
+//        fab.setScaleX(0);
+//        fab.setScaleY(0);
+//        fab.animate().scaleX(1).scaleY(1).start();
+        // Approach 2
+//        ObjectAnimator scalex = ObjectAnimator.ofFloat(fab, "scaleX", 0, 1);
+//        ObjectAnimator scaley = ObjectAnimator.ofFloat(fab, "scaleY", 0, 1);
+//        AnimatorSet scaleFab = new AnimatorSet();
+//        // play this set of animations together
+//        scaleFab.playTogether(scalex, scaley);
+//        // animation will last 0.25 seconds
+//        scaleFab.setDuration(250);
+        // We use XML animation approach here (animator.scale.xml)
+        Animator scaleFab = AnimatorInflater.loadAnimator(this,R.animator.scale);
+        scaleFab.setTarget(fab);
+
+        /* Title and Tracks panels drop down */
+        int titleStartValue = titlePanel.getTop();
+        int titleEndValue = titlePanel.getBottom();
+        ObjectAnimator animatorTitle = ObjectAnimator.ofInt(titlePanel,"bottom",titleStartValue,titleEndValue);
+        animatorTitle.setInterpolator(new AccelerateInterpolator());
+//        animatorTitle.setDuration(1000);
+//        // animation will start after 0.5 seconds
+//        animatorTitle.setStartDelay(500);
+
+        int trackStartValue = trackPanel.getTop();
+        int trackEndValue = trackPanel.getBottom();
+        ObjectAnimator animatorTrack = ObjectAnimator.ofInt(trackPanel, "bottom", trackStartValue, trackEndValue);
+        animatorTrack.setInterpolator(new DecelerateInterpolator());
+//        animatorTrack.setDuration(1000);
+
+        /* Set default values */
         fab.setScaleX(0);
         fab.setScaleY(0);
-        fab.animate().scaleX(1).scaleY(1).start();
+        titlePanel.setBottom(titleStartValue);
+        trackPanel.setBottom(trackStartValue);
+
+        /* Choreograph multiple animations */
+        AnimatorSet set = new AnimatorSet();
+        // play this set of animations sequentially
+        set.playSequentially(animatorTitle, animatorTrack, scaleFab);
+        set.start();
     }
 
     @OnClick(R.id.album_art)
