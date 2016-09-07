@@ -24,6 +24,7 @@ public class AlbumListActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_album_list);
+
         setupTransitions();
 
         ButterKnife.bind(this);
@@ -31,6 +32,7 @@ public class AlbumListActivity extends Activity {
     }
 
     private void setupTransitions() {
+        // when this activity starts another activity
 //        getWindow().setExitTransition(new Explode());
     }
 
@@ -73,7 +75,9 @@ public class AlbumListActivity extends Activity {
         RecyclerView.Adapter adapter = new RecyclerView.Adapter<AlbumVH>() {
             @Override
             public AlbumVH onCreateViewHolder(ViewGroup parent, int viewType) {
+
                 View albumView = getLayoutInflater().inflate(R.layout.album_grid_item, parent, false);
+
                 return new AlbumVH(albumView, new OnVHClickedListener() {
                     @Override
                     public void onVHClicked(AlbumVH vh) {
@@ -81,8 +85,17 @@ public class AlbumListActivity extends Activity {
                         Intent intent = new Intent(AlbumListActivity.this, AlbumDetailActivity.class);
                         intent.putExtra(AlbumDetailActivity.EXTRA_ALBUM_ART_RESID, albumArtResId);
 
+                        // Create an ActivityOptions to transition between Activities using cross-Activity scene animations.
                         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                                AlbumListActivity.this, vh.albumArt, "albumArt");
+                                AlbumListActivity.this,
+                                vh.albumArt,  // Shared element object. Used to capture initial state
+                                "albumArt");  // Shared element's name. Used to detect shared view (id wont work in some cases)
+                        // Shared elements must have android:transitionName="albumArt" attribute
+                        // in both activities layout files to calculate it's initial and planned state
+                        // then apply according animation
+                        // NOTE: SHARED ELEMENT IS AN ILLUSION. NO VIEWS ARE REALLY SHARED AT ALL
+
+                        // Pass options in bundle along with intent
                         startActivity(intent, options.toBundle());
                     }
                 });

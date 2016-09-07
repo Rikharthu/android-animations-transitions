@@ -1,11 +1,12 @@
 <resources>
-
+<!-- Style for sdk v21+ -->
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:colorPrimary">@color/yellow</item>
         <item name="android:colorPrimaryDark">#ff070707</item>
         <item name="android:colorAccent">#ff0000</item>
         <item name="android:windowContentTransitions">true</item>
+        <!-- Set Enter transition -->
         <item name="android:windowEnterTransition">@android:transition/slide_right</item>
     </style>
 
@@ -14,6 +15,7 @@
         <item name="android:colorPrimaryDark">#060049</item>
         <item name="android:colorAccent">#ff0000</item>
         <item name="android:windowContentTransitions">true</item>
+
         <item name="android:windowEnterTransition">@android:transition/slide_right</item>
     </style>
 </resources>

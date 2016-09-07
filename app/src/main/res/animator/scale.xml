@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <set xmlns:android="http://schemas.android.com/apk/res/android"
     android:ordering="together">
+    <!-- AnimatorSet scaleFab=new AnimatorSet();
+         scaleFab.playTogether(scalex,scaley); -->
 
     <objectAnimator android:propertyName="scaleX" android:valueFrom="0"
         android:valueTo="1" android:duration="150"/>
+    <!-- ObjectAnimator scalex=ObjectAnimator.ofFloat(fab,"scaleX",0,1)
+         scalex.setDuration(150); -->
 
     <objectAnimator android:propertyName="scaleY" android:valueFrom="0"
         android:valueTo="1" android:duration="150"/>
+    <!-- ObjectAnimator scaley=ObjectAnimator.ofFloat(fab,"scaleY",0,1)
+         scalex.setDuration(150); -->
+
 </set>
